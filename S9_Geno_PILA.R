@@ -67,10 +67,10 @@ X1 <- cbind(rep(1,N.surv),X.Sites.S,X.Yr.S,X.Ht.S,X.Geno.S2,X.CWD.S)
 I <- ncol(X1)  #columns of design matrix
 
 ###### Priors
-Bpm <- c(2.5,rep(0,3),c(-1.9,-0.8,-0.3,-0.3,-0.3),0.1,rep(0.1,5),0)
+Bpm <- c(2.5,rep(0,3),rep(-0.3,3),0.1,rep(0.1,5),0)
 #Intercept = 0.92% survival; with years becomes 65%, 85%, 3 x 90%; with height, 10 cm +intercept+ 1st yr is 66.8%, 20 cm is 69%
-#Bps <- c(3,rep(3,3),rep(3,5),3,rep(3,5),3)   #variances
-Bps <- c(6,rep(6,3),rep(6,5),6,rep(6,5),6)   #variances
+#Bps <- c(3,rep(3,3),rep(3,3),3,rep(3,5),3)   #variances
+Bps <- c(6,rep(6,3),rep(6,3),6,rep(6,5),6)   #variances
 bprior <- matrix(Bpm,I,1)  #beta mean matrix
 vinvert <- solve(diag(Bps))  # 1/beta variances
 
@@ -85,7 +85,7 @@ S2 <- 0.35
 
 
 ###Starting values
-Beta <- c(runif(1,1,5),runif(3,-0.1,0.1),runif(1,-4,0),runif(1,-1.6,0.1),runif(3,-0.6,0.2),runif(1,-0.1,0.2),runif(5,-1,1),runif(1,-1,1))
+Beta <- c(runif(1,1,5),runif(3,-0.1,0.1),runif(3,-0.6,0.2),runif(1,-0.1,0.2),runif(5,-1,1),runif(1,-1,1))
 Sig <- runif(1,0.05,0.5)  
 
 LM <- lm.calc(X1,Beta,Sig,N.surv)
@@ -153,7 +153,7 @@ outpar[,3]<- c(apply(beta.thin,1,sd),sd(sig.thin))
 outpar[,4]<- c(apply(beta.thin,1, quantile, probs= 0.025),quantile(sig.thin,0.025))
 outpar[,5]<- c(apply(beta.thin,1, quantile, probs= 0.975),quantile(sig.thin,0.975))
 colnames(outpar) <- c('prior','estimate','se','.025','.975')
-rownames(outpar) <- c('Int','site17','site18','site19','Yr1','Yr2','Yr3','Yr4','Yr5','Ht','SnoG','JMxG','CWDG','JMinG','PrG','Clim','sig')
+rownames(outpar) <- c('Int','site17','site18','site19','Yr3','Yr4','Yr5','Ht','SnoG','JMxG','CWDG','JMinG','PrG','Clim','sig')
 outpar
 
 
