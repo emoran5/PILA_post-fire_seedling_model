@@ -1,16 +1,18 @@
 ##Basing this on TagSdlDataOrg5 in **
 
+##Seedling observation data
 bframe1 <-data.frame(read.table("Peavine_PILA_dec2_trim.txt",header=T,fill=T,row.names=NULL))
 bframe2 <-data.frame(read.table("Stumpy2018_PILAdec2_trim.txt",header=T,fill=T,row.names=NULL)) 
 bframe3 <-data.frame(read.table("Stumpy2017_PILAdec2_trim.txt",header=T,fill=T,row.names=NULL))
 
+##Climate data
 CWD <- data.frame(read.table("CWD_91_21.txt",header=T,fill=T,row.names=NULL))
 Snow <- data.frame(read.table("Sno_91_21.txt",header=T,fill=T,row.names=NULL))
 Precip <- data.frame(read.table("Precip_91_21.txt",header=T,fill=T,row.names=NULL))
 JMin <- data.frame(read.table("JMin_91_21.txt",header=T,fill=T,row.names=NULL))
 JMax <- data.frame(read.table("JMax_91_21.txt",header=T,fill=T,row.names=NULL))
 
-#### PILA seedlings 
+#### PILA seedling data orgnaization, by planting site
 
 PILA.19.Sdl <- cbind(bframe1[,4],bframe1[,7],bframe1[,9],bframe1[,3],bframe1[,12:16],bframe1[,18],bframe1[,23])
 PILA.18.Sdl <- cbind(bframe2[,3],bframe2[,6],bframe2[,8],bframe2[,2],bframe2[,12:15],bframe2[,18],bframe2[,21],bframe2[,25])
@@ -20,7 +22,7 @@ colnames(PILA.19.Sdl)<-c('Species','SZ','ElevB','Lot_Name','PlantYr','MortYr','H
 colnames(PILA.18.Sdl)<-c('Species','SZ','ElevB','Lot_Name','PlantYr','MortYr','Ht17','Ht18','Ht19','Ht20','Ht21')
 colnames(PILA.17.Sdl)<-c('Species','SZ','ElevB','Lot_Name','PlantYr','MortYr','Ht17','Ht18','Ht19','Ht20','Ht21')
 
-#seedling numbers
+##seedling numbers
 N.PILA.19 <- nrow(PILA.19.Sdl)
 N.PILA.18 <- nrow(PILA.18.Sdl)
 N.PILA.17 <- nrow(PILA.17.Sdl)
@@ -29,6 +31,7 @@ PILA.19.survmat <- matrix(1,N.PILA.19,3);PILA.19.Htmat <- matrix(NA,N.PILA.19,3)
 PILA.18.survmat <- matrix(1,N.PILA.18,4);PILA.18.Htmat <- matrix(NA,N.PILA.18,4)
 PILA.17.survmat <- matrix(1,N.PILA.17,5);PILA.17.Htmat <- matrix(NA,N.PILA.17,5)
 
+#Calculate mean original heights, to fill in missing 1st year data
 mn.Ht.19 <- 0; tot.m.19 <- 0
 for(i in 1:N.PILA.19){
 	if(PILA.19.Sdl[i,9]>0) {
@@ -36,7 +39,7 @@ for(i in 1:N.PILA.19){
 		tot.m.19 <- tot.m.19 + 1
 	}
 }
-I.mn.Ht.19 <- mn.Ht.19/tot.m.19 #15.04
+I.mn.Ht.19 <- mn.Ht.19/tot.m.19 #15.04 cm - for 2019 site
 
 mn.Ht.18 <- 0; tot.m.18 <- 0
 for(i in 1:N.PILA.18){
@@ -45,7 +48,7 @@ for(i in 1:N.PILA.18){
 		tot.m.18 <- tot.m.18 + 1
 	}
 }
-I.mn.Ht.18 <- mn.Ht.18/tot.m.18 #12.89
+I.mn.Ht.18 <- mn.Ht.18/tot.m.18 #12.89 cm - for 2018 site
 
 mn.Ht.17 <- 0; tot.m.17 <- 0
 for(i in 1:N.PILA.17){
@@ -54,8 +57,11 @@ for(i in 1:N.PILA.17){
 		tot.m.17 <- tot.m.17 + 1
 	}
 }
-I.mn.Ht.17 <- mn.Ht.17/tot.m.17 #14.57
+I.mn.Ht.17 <- mn.Ht.17/tot.m.17 #14.57 cm - for 2017 site
 
+
+#####Fill in missing data
+####PILA.17.Htmat has 5 columns representing heights in 2017,2018,2019,2020,and 2021. PILA.19.Htmat 3 representing heights in 2019,2020,and 2021. PILA.18.Htmat in between.
 
 for(i in 1:N.PILA.19){
 	if(PILA.19.Sdl[i,'MortYr']>0){
@@ -164,6 +170,7 @@ PILA.18.rel_surv <- PILA.18.total/PILA.18.start
 PILA.19.total <- c(PILA.19.start,apply(PILA.19.survmat,2,sum))
 PILA.19.rel_surv <- PILA.19.total/PILA.19.start
 
+#Note that survival has 5 increments after planting, while growth will have 4, because survival was assessed at the end of the first summer after spring planting!
 X1 <- c(0,0.5,1,2,3,4) #years from planting
 
 
@@ -317,7 +324,7 @@ dev.off()
 
 
 
-#########Growth matrix
+#########Growth matrix - For PILA.17.Grow, 4 cols w/ increments from 2017-18, 2018-19, 2019-20, and 2020-21
 
 PILA.19.Grow <- cbind((PILA.19.Htmat[,2]-PILA.19.Htmat[,1]),(PILA.19.Htmat[,3]-PILA.19.Htmat[,2]))
 PILA.18.Grow <- cbind((PILA.18.Htmat[,2]-PILA.18.Htmat[,1]),(PILA.18.Htmat[,3]-PILA.18.Htmat[,2]),(PILA.18.Htmat[,4]-PILA.18.Htmat[,3]))
@@ -391,9 +398,9 @@ X.Sno.G <- numeric(0) #Snow (growth)
 
 for(t in 1:5){ ###looping over years
 	
-	if(t==1){    ###Year 1, 2017 site only
+	if(t==1){    ###Year 1 2017, 2017 site only
 		#Survival.all
-		surv.temp <- PILA.17.survmat[,t]
+		surv.temp <- PILA.17.survmat[,t] #seedlings alive or dead in fall 2017
 		N.sdl.17 <- length(surv.temp)
 
 		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp)
@@ -407,7 +414,7 @@ for(t in 1:5){ ###looping over years
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
 		
 		#Height
-		X.Ht.S <- c(X.Ht.S,PILA.17.Htmat[,1])
+		X.Ht.S <- c(X.Ht.S,PILA.17.Htmat[,1]) #height in 2017
 		
 		#Elev
 		X.Elev.S <- rbind(X.Elev.S,PILA.17.Elev)
@@ -415,25 +422,25 @@ for(t in 1:5){ ###looping over years
 		#SZ
 		X.SZ.S <- rbind(X.SZ.S,PILA.17.SZ)
 		
-		#Climate
+		#Climate - 2017
 		X.CWD.S <- c(X.CWD.S,rep(CWD[26,2],N.PILA.17)); X.P.S <- c(X.P.S,rep(Precip[26,2],N.PILA.17))
 		X.Sno.S <- c(X.Sno.S,rep(Snow[26,2],N.PILA.17))
 		X.JMin.S <- c(X.JMin.S,rep(JMin[26,2],N.PILA.17)); X.JMax.S <- c(X.JMax.S,rep(JMax[26,2],N.PILA.17))
 	}
 	
-	if(t==2){   ###Year 2, 2017 and 2018 sites
+	if(t==2){   ######Year 2 2018, 2017 and 2018 sites
 		site.17.live.2 <- which(PILA.17.survmat[,1]==1) #which seedlings alive in year 1, 2017 site			
-		surv.temp.1 <- PILA.17.survmat[site.17.live.2,t]
+		surv.temp.1 <- PILA.17.survmat[site.17.live.2,t] #only consider 2nd yr survival for seedlings that survived 1st year at 2017 site
 		surv.temp.2 <- PILA.18.survmat[,(t-1)]
 		N.sdl.17 <- length(surv.temp.1); N.sdl.18 <- length(surv.temp.2)
 		
-		site.17.live.2G <- which(PILA.17.survmat[,1]==1 & PILA.17.survmat[,2]==1) #which seedlings alive in year 1 &2, 2017 site	
+		site.17.live.2G <- which(PILA.17.survmat[,1]==1 & PILA.17.survmat[,2]==1) #which seedlings alive in year 1 & 2, 2017 site - only consider growth for seedlings that are still alive in year 2	
 		gro.temp.1 <- PILA.17.Grow[site.17.live.2G,(t-1)]
 		N.sdl.17G <- length(gro.temp.1)
 
 		###2017 site seedlings
-		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.1)
-		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.1)
+		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.1) #2017-2018 survival
+		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.1) #2017-2018 growth increment
 		
 		#planting site
 		site.temp.S <- matrix(0,N.sdl.17,3); site.temp.S[,1] <- 1   #(1,0,0)
@@ -444,11 +451,11 @@ for(t in 1:5){ ###looping over years
 		#Year/age
 		Yr.temp.S <- matrix(0,N.sdl.17,5); Yr.temp.S[,2] <- 1   #(0,1,0,0,0)
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
-		Yr.temp.G <- matrix(0,N.sdl.17G,5); Yr.temp.G[,1] <- 1   #(1,0,0,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.17G,4); Yr.temp.G[,1] <- 1   #(1,0,0,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
-		#Height
-		X.Ht.S <- c(X.Ht.S,PILA.17.Htmat[site.17.live.2,1])
+		#Height - still use 2017 height (1st column) for 2017 site so that previous year height is what's being used as predictor
+		X.Ht.S <- c(X.Ht.S,PILA.17.Htmat[site.17.live.2,1]) 
 		X.Ht.G <- c(X.Ht.G,PILA.17.Htmat[site.17.live.2G,1])
 		
 		#Elev
@@ -459,7 +466,7 @@ for(t in 1:5){ ###looping over years
 		X.SZ.S <- rbind(X.SZ.S,PILA.17.SZ[site.17.live.2,])
 		X.SZ.G <- rbind(X.SZ.G,PILA.17.SZ[site.17.live.2G,])
 		
-		#Climate
+		#Climate - 2018 values
 		X.CWD.S <- c(X.CWD.S,rep(CWD[27,2],N.sdl.17)); X.P.S <- c(X.P.S,rep(Precip[27,2],N.sdl.17))
 		X.Sno.S <- c(X.Sno.S,rep(Snow[27,2],N.sdl.17))
 		X.JMin.S <- c(X.JMin.S,rep(JMin[27,2],N.sdl.17)); X.JMax.S <- c(X.JMax.S,rep(JMax[27,2],N.sdl.17))
@@ -469,7 +476,7 @@ for(t in 1:5){ ###looping over years
 		X.JMin.G <- c(X.JMin.G,rep(JMin[27,2],N.sdl.17G)); X.JMax.G <- c(X.JMax.G,rep(JMax[27,2],N.sdl.17G))
 		
 		###2018 site seedlings
-		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.2)
+		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.2) #only consider survival but not growth, since this is end of 1st season.
 		
 		#planting site
 		site.temp.S <- matrix(0,N.sdl.18,3); site.temp.S[,2] <- 1   #(0,1,0)
@@ -488,13 +495,13 @@ for(t in 1:5){ ###looping over years
 		#SZ
 		X.SZ.S <- rbind(X.SZ.S,PILA.18.SZ)
 		
-		#Climate
+		#Climate - 2018
 		X.CWD.S <- c(X.CWD.S,rep(CWD[27,3],N.PILA.18)); X.P.S <- c(X.P.S,rep(Precip[27,3],N.PILA.18))
 		X.Sno.S <- c(X.Sno.S,rep(Snow[27,3],N.PILA.18))
 		X.JMin.S <- c(X.JMin.S,rep(JMin[27,3],N.PILA.18)); X.JMax.S <- c(X.JMax.S,rep(JMax[27,3],N.PILA.18))
 	}
 	
-	if(t==3){   ###Year 3, all sites
+	if(t==3){   ###Year 3 2019, all sites
 		site.17.live.3 <- which(PILA.17.survmat[,2]==1) #which seedlings alive in year 2, 2017 site	
 		site.18.live.3 <- which(PILA.18.survmat[,1]==1) #which seedlings alive in year 2, 2018 site			
 		surv.temp.1 <- PILA.17.survmat[site.17.live.3,t]
@@ -508,8 +515,8 @@ for(t in 1:5){ ###looping over years
 		gro.temp.2 <- PILA.18.Grow[site.18.live.3G,(t-2)]; N.sdl.18G <- length(gro.temp.2)
 
 		###2017 site seedlings
-		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.1)
-		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.1)
+		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.1) #2018-2019 survival
+		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.1) #2018-2019 growth increment
 		
 		#planting site
 		site.temp.S <- matrix(0,N.sdl.17,3); site.temp.S[,1] <- 1   #(1,0,0)
@@ -520,10 +527,10 @@ for(t in 1:5){ ###looping over years
 		#Year/age
 		Yr.temp.S <- matrix(0,N.sdl.17,5); Yr.temp.S[,3] <- 1   #(0,0,1,0,0)
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
-		Yr.temp.G <- matrix(0,N.sdl.17G,5); Yr.temp.G[,2] <- 1   #(0,1,0,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.17G,4); Yr.temp.G[,2] <- 1   #(0,1,0,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
-		#Height
+		#Height - 2018, previous year
 		X.Ht.S <- c(X.Ht.S,PILA.17.Htmat[site.17.live.3,2])
 		X.Ht.G <- c(X.Ht.G,PILA.17.Htmat[site.17.live.3G,2])
 		
@@ -535,7 +542,7 @@ for(t in 1:5){ ###looping over years
 		X.SZ.S <- rbind(X.SZ.S,PILA.17.SZ[site.17.live.3,])
 		X.SZ.G <- rbind(X.SZ.G,PILA.17.SZ[site.17.live.3G,])
 		
-		#Climate
+		#Climate -2019
 		X.CWD.S <- c(X.CWD.S,rep(CWD[28,2],N.sdl.17)); X.P.S <- c(X.P.S,rep(Precip[28,2],N.sdl.17))
 		X.Sno.S <- c(X.Sno.S,rep(Snow[28,2],N.sdl.17))
 		X.JMin.S <- c(X.JMin.S,rep(JMin[28,2],N.sdl.17)); X.JMax.S <- c(X.JMax.S,rep(JMax[28,2],N.sdl.17))
@@ -546,8 +553,8 @@ for(t in 1:5){ ###looping over years
 
 		
 		###2018 site seedlings
-		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.2)
-		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.2)
+		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.2) #2018-2019 survival
+		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.2) #2018-2019 growth increment
 		
 		#planting site
 		site.temp.S <- matrix(0,N.sdl.18,3); site.temp.S[,2] <- 1   #(0,1,0)
@@ -558,11 +565,11 @@ for(t in 1:5){ ###looping over years
 		#Year/age
 		Yr.temp.S <- matrix(0,N.sdl.18,5); Yr.temp.S[,2] <- 1   #(0,1,0,0,0)
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
-		Yr.temp.G <- matrix(0,N.sdl.18G,5); Yr.temp.G[,1] <- 1   #(1,0,0,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.18G,4); Yr.temp.G[,1] <- 1   #(1,0,0,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
-		#Height
-		X.Ht.S <- c(X.Ht.S,PILA.18.Htmat[site.18.live.3,1])
+		#Height - still use 2018 height (1st column) for 2018 site so that previous year height is whats being used as predictor
+		X.Ht.S <- c(X.Ht.S,PILA.18.Htmat[site.18.live.3,1]) 
 		X.Ht.G <- c(X.Ht.G,PILA.18.Htmat[site.18.live.3G,1])
 		
 		#Elev
@@ -573,7 +580,7 @@ for(t in 1:5){ ###looping over years
 		X.SZ.S <- rbind(X.SZ.S,PILA.18.SZ[site.18.live.3,])
 		X.SZ.G <- rbind(X.SZ.G,PILA.18.SZ[site.18.live.3G,])
 		
-		#Climate
+		#Climate-2019
 		X.CWD.S <- c(X.CWD.S,rep(CWD[28,3],N.sdl.18)); X.P.S <- c(X.P.S,rep(Precip[28,3],N.sdl.18))
 		X.Sno.S <- c(X.Sno.S,rep(Snow[28,3],N.sdl.18))
 		X.JMin.S <- c(X.JMin.S,rep(JMin[28,3],N.sdl.18)); X.JMax.S <- c(X.JMax.S,rep(JMax[28,3],N.sdl.18))
@@ -583,7 +590,7 @@ for(t in 1:5){ ###looping over years
 		X.JMin.G <- c(X.JMin.G,rep(JMin[28,3],N.sdl.18G)); X.JMax.G <- c(X.JMax.G,rep(JMax[28,3],N.sdl.18G))
 		
 		###2019 site seedlings
-		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.3)
+		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.3) #which seedlings alive in year 3, 2019 site
 		
 		#planting site
 		site.temp.S <- matrix(0,N.sdl.19,3); site.temp.S[,3] <- 1   #(0,0,1)
@@ -602,7 +609,7 @@ for(t in 1:5){ ###looping over years
 		#SZ
 		X.SZ.S <- rbind(X.SZ.S,PILA.19.SZ)
 		
-		#Climate
+		#Climate-2019
 		X.CWD.S <- c(X.CWD.S,rep(CWD[28,4],N.PILA.19)); X.P.S <- c(X.P.S,rep(Precip[28,4],N.PILA.19))
 		X.Sno.S <- c(X.Sno.S,rep(Snow[28,4],N.PILA.19))
 		X.JMin.S <- c(X.JMin.S,rep(JMin[28,4],N.PILA.19)); X.JMax.S <- c(X.JMax.S,rep(JMax[28,4],N.PILA.19))
@@ -626,8 +633,8 @@ for(t in 1:5){ ###looping over years
 		gro.temp.3 <- PILA.19.Grow[site.19.live.4G,(t-3)]; N.sdl.19G <- length(gro.temp.3)
 
 		###2017 site seedlings
-		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.1)
-		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.1)
+		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.1)  #2019-2020 survival
+		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.1) #2019-2020 growth increment
 		
 		#planting site
 		site.temp.S <- matrix(0,N.sdl.17,3); site.temp.S[,1] <- 1   #(1,0,0)
@@ -638,10 +645,10 @@ for(t in 1:5){ ###looping over years
 		#Year/age
 		Yr.temp.S <- matrix(0,N.sdl.17,5); Yr.temp.S[,4] <- 1   #(0,0,0,1,0)
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
-		Yr.temp.G <- matrix(0,N.sdl.17G,5); Yr.temp.G[,3] <- 1   #(0,0,1,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.17G,4); Yr.temp.G[,3] <- 1   #(0,0,1,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
-		#Height
+		#Height - in 2019, prev year
 		X.Ht.S <- c(X.Ht.S,PILA.17.Htmat[site.17.live.4,3])
 		X.Ht.G <- c(X.Ht.G,PILA.17.Htmat[site.17.live.4G,3])
 		
@@ -653,7 +660,7 @@ for(t in 1:5){ ###looping over years
 		X.SZ.S <- rbind(X.SZ.S,PILA.17.SZ[site.17.live.4,])
 		X.SZ.G <- rbind(X.SZ.G,PILA.17.SZ[site.17.live.4G,])
 		
-		#Climate
+		#Climate - 2020
 		X.CWD.S <- c(X.CWD.S,rep(CWD[29,2],N.sdl.17)); X.P.S <- c(X.P.S,rep(Precip[29,2],N.sdl.17))
 		X.Sno.S <- c(X.Sno.S,rep(Snow[29,2],N.sdl.17))
 		X.JMin.S <- c(X.JMin.S,rep(JMin[29,2],N.sdl.17)); X.JMax.S <- c(X.JMax.S,rep(JMax[29,2],N.sdl.17))
@@ -663,8 +670,8 @@ for(t in 1:5){ ###looping over years
 		X.JMin.G <- c(X.JMin.G,rep(JMin[29,2],N.sdl.17G)); X.JMax.G <- c(X.JMax.G,rep(JMax[29,2],N.sdl.17G))
 		
 		###2018 site seedlings
-		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.2)
-		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.2)
+		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.2)  #2019-2020 survival
+		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.2) #2019-2020 growth increment
 		
 		#planting site
 		site.temp.S <- matrix(0,N.sdl.18,3); site.temp.S[,2] <- 1   #(0,1,0)
@@ -675,10 +682,10 @@ for(t in 1:5){ ###looping over years
 		#Year/age
 		Yr.temp.S <- matrix(0,N.sdl.18,5); Yr.temp.S[,3] <- 1   #(0,0,1,0,0)
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
-		Yr.temp.G <- matrix(0,N.sdl.18G,5); Yr.temp.G[,2] <- 1   #(0,1,0,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.18G,4); Yr.temp.G[,2] <- 1   #(0,1,0,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
-		#Height
+		#Height - in 2019, prev year
 		X.Ht.S <- c(X.Ht.S,PILA.18.Htmat[site.18.live.4,2])
 		X.Ht.G <- c(X.Ht.G,PILA.18.Htmat[site.18.live.4G,2])
 		
@@ -690,7 +697,7 @@ for(t in 1:5){ ###looping over years
 		X.SZ.S <- rbind(X.SZ.S,PILA.18.SZ[site.18.live.4,])
 		X.SZ.G <- rbind(X.SZ.G,PILA.18.SZ[site.18.live.4G,])
 		
-		#Climate
+		#Climate - 2020
 		X.CWD.S <- c(X.CWD.S,rep(CWD[29,3],N.sdl.18)); X.P.S <- c(X.P.S,rep(Precip[29,3],N.sdl.18))
 		X.Sno.S <- c(X.Sno.S,rep(Snow[29,3],N.sdl.18))
 		X.JMin.S <- c(X.JMin.S,rep(JMin[29,3],N.sdl.18)); X.JMax.S <- c(X.JMax.S,rep(JMax[29,3],N.sdl.18))
@@ -700,8 +707,8 @@ for(t in 1:5){ ###looping over years
 		X.JMin.G <- c(X.JMin.G,rep(JMin[29,3],N.sdl.18G)); X.JMax.G <- c(X.JMax.G,rep(JMax[29,3],N.sdl.18G))
 		
 		###2019 site seedlings
-		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.3)
-		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.3)
+		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.3)  #2019-2020 survival
+		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.3)  #2019-2020 growth increment
 		
 		#planting site
 		site.temp.S <- matrix(0,N.sdl.19,3); site.temp.S[,3] <- 1   #(0,0,1)
@@ -712,10 +719,10 @@ for(t in 1:5){ ###looping over years
 		#Year/age
 		Yr.temp.S <- matrix(0,N.sdl.19,5); Yr.temp.S[,2] <- 1   #(0,1,0,0,0)
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
-		Yr.temp.G <- matrix(0,N.sdl.19G,5); Yr.temp.G[,1] <- 1   #(1,0,0,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.19G,4); Yr.temp.G[,1] <- 1   #(1,0,0,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
-		#Height
+		#Height- still use 2019 height (1st column) for 2019 site so that previous year height is whats being used as predictor
 		X.Ht.S <- c(X.Ht.S,PILA.19.Htmat[site.19.live.4,1])
 		X.Ht.G <- c(X.Ht.G,PILA.19.Htmat[site.19.live.4G,1])
 		
@@ -727,7 +734,7 @@ for(t in 1:5){ ###looping over years
 		X.SZ.S <- rbind(X.SZ.S,PILA.19.SZ[site.19.live.4,])
 		X.SZ.G <- rbind(X.SZ.G,PILA.19.SZ[site.19.live.4G,])
 		
-		#Climate
+		#Climate - 2020
 		X.CWD.S <- c(X.CWD.S,rep(CWD[29,4],N.sdl.19)); X.P.S <- c(X.P.S,rep(Precip[29,4],N.sdl.19))
 		X.Sno.S <- c(X.Sno.S,rep(Snow[29,4],N.sdl.19))
 		X.JMin.S <- c(X.JMin.S,rep(JMin[29,4],N.sdl.19)); X.JMax.S <- c(X.JMax.S,rep(JMax[29,4],N.sdl.19))
@@ -737,7 +744,7 @@ for(t in 1:5){ ###looping over years
 		X.JMin.G <- c(X.JMin.G,rep(JMin[29,4],N.sdl.19G)); X.JMax.G <- c(X.JMax.G,rep(JMax[29,4],N.sdl.19G))
 	}
 	
-	if(t==5){   ###Year 5, all sites
+	if(t==5){   ###Year 5 2021, all sites
 		site.17.live.5 <- which(PILA.17.survmat[,4]==1) #which seedlings alive in year 4, 2017 site	
 		site.18.live.5 <- which(PILA.18.survmat[,3]==1) #which seedlings alive in year 4, 2018 site
 		site.19.live.5 <- which(PILA.19.survmat[,2]==1) #which seedlings alive in year 4, 2019 site				
@@ -754,8 +761,8 @@ for(t in 1:5){ ###looping over years
 		gro.temp.3 <- PILA.19.Grow[site.19.live.5G,(t-3)]; N.sdl.19G <- length(gro.temp.3)
 
 		###2017 site seedlings
-		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.1)
-		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.1)
+		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.1) #2020-2021 survival
+		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.1) #2020-2021 growth increment
 		
 		#planting site
 		site.temp.S <- matrix(0,N.sdl.17,3); site.temp.S[,1] <- 1   #(1,0,0)
@@ -766,10 +773,10 @@ for(t in 1:5){ ###looping over years
 		#Year/age
 		Yr.temp.S <- matrix(0,N.sdl.17,5); Yr.temp.S[,5] <- 1   #(0,0,0,0,1)
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
-		Yr.temp.G <- matrix(0,N.sdl.17G,5); Yr.temp.G[,4] <- 1   #(0,0,0,1,0)
+		Yr.temp.G <- matrix(0,N.sdl.17G,4); Yr.temp.G[,4] <- 1   #(0,0,0,1)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
-		#Height
+		#Height - in 2020, prev year
 		X.Ht.S <- c(X.Ht.S,PILA.17.Htmat[site.17.live.5,4])
 		X.Ht.G <- c(X.Ht.G,PILA.17.Htmat[site.17.live.5G,4])
 		
@@ -781,7 +788,7 @@ for(t in 1:5){ ###looping over years
 		X.SZ.S <- rbind(X.SZ.S,PILA.17.SZ[site.17.live.5,])
 		X.SZ.G <- rbind(X.SZ.G,PILA.17.SZ[site.17.live.5G,])
 		
-		#Climate
+	 	#Climate - 2021
 		X.CWD.S <- c(X.CWD.S,rep(CWD[30,2],N.sdl.17)); X.P.S <- c(X.P.S,rep(Precip[30,2],N.sdl.17))
 		X.Sno.S <- c(X.Sno.S,rep(Snow[30,2],N.sdl.17))
 		X.JMin.S <- c(X.JMin.S,rep(JMin[30,2],N.sdl.17)); X.JMax.S <- c(X.JMax.S,rep(JMax[30,2],N.sdl.17))
@@ -791,8 +798,8 @@ for(t in 1:5){ ###looping over years
 		X.JMin.G <- c(X.JMin.G,rep(JMin[30,2],N.sdl.17G)); X.JMax.G <- c(X.JMax.G,rep(JMax[30,2],N.sdl.17G))
 		
 		###2018 site seedlings
-		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.2)
-		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.2)
+		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.2) #2020-2021 survival
+		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.2) #2020-2021 growth increment
 		
 		#planting site
 		site.temp.S <- matrix(0,N.sdl.18,3); site.temp.S[,2] <- 1   #(0,1,0)
@@ -803,10 +810,10 @@ for(t in 1:5){ ###looping over years
 		#Year/age
 		Yr.temp.S <- matrix(0,N.sdl.18,5); Yr.temp.S[,4] <- 1   #(0,0,0,1,0)
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
-		Yr.temp.G <- matrix(0,N.sdl.18G,5); Yr.temp.G[,3] <- 1   #(0,0,1,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.18G,4); Yr.temp.G[,3] <- 1   #(0,0,1,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
-		#Height
+		#Height - in 2020, prev year
 		X.Ht.S <- c(X.Ht.S,PILA.18.Htmat[site.18.live.5,3])
 		X.Ht.G <- c(X.Ht.G,PILA.18.Htmat[site.18.live.5G,3])
 		
@@ -818,7 +825,7 @@ for(t in 1:5){ ###looping over years
 		X.SZ.S <- rbind(X.SZ.S,PILA.18.SZ[site.18.live.5,])
 		X.SZ.G <- rbind(X.SZ.G,PILA.18.SZ[site.18.live.5G,])
 		
-		#Climate
+		#Climate - 2021
 		X.CWD.S <- c(X.CWD.S,rep(CWD[30,3],N.sdl.18)); X.P.S <- c(X.P.S,rep(Precip[30,3],N.sdl.18))
 		X.Sno.S <- c(X.Sno.S,rep(Snow[30,3],N.sdl.18))
 		X.JMin.S <- c(X.JMin.S,rep(JMin[30,3],N.sdl.18)); X.JMax.S <- c(X.JMax.S,rep(JMax[30,3],N.sdl.18))
@@ -828,8 +835,8 @@ for(t in 1:5){ ###looping over years
 		X.JMin.G <- c(X.JMin.G,rep(JMin[30,3],N.sdl.18G)); X.JMax.G <- c(X.JMax.G,rep(JMax[30,3],N.sdl.18G))
 		
 		###2019 site seedlings
-		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.3)
-		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.3)
+		Y.PILA.surv.all <- c(Y.PILA.surv.all,surv.temp.3) #2020-2021 survival
+		Y.PILA.grow.all <- c(Y.PILA.grow.all,gro.temp.3) #2020-2021 growth increment
 		
 		#planting site
 		site.temp.S <- matrix(0,N.sdl.19,3); site.temp.S[,3] <- 1   #(0,0,1)
@@ -840,10 +847,10 @@ for(t in 1:5){ ###looping over years
 		#Year/age
 		Yr.temp.S <- matrix(0,N.sdl.19,5); Yr.temp.S[,3] <- 1   #(0,0,1,0,0)
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
-		Yr.temp.G <- matrix(0,N.sdl.19G,5); Yr.temp.G[,2] <- 1   #(0,1,0,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.19G,4); Yr.temp.G[,2] <- 1   #(0,1,0,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
-		#Height
+		#Height - in 2020, prev year
 		X.Ht.S <- c(X.Ht.S,PILA.19.Htmat[site.19.live.5,2])
 		X.Ht.G <- c(X.Ht.G,PILA.19.Htmat[site.19.live.5G,2])
 		
@@ -855,7 +862,7 @@ for(t in 1:5){ ###looping over years
 		X.SZ.S <- rbind(X.SZ.S,PILA.19.SZ[site.19.live.5,])
 		X.SZ.G <- rbind(X.SZ.G,PILA.19.SZ[site.19.live.5G,])
 		
-		#Climate
+		#Climate - 2021
 		X.CWD.S <- c(X.CWD.S,rep(CWD[30,4],N.sdl.19)); X.P.S <- c(X.P.S,rep(Precip[30,4],N.sdl.19))
 		X.Sno.S <- c(X.Sno.S,rep(Snow[30,4],N.sdl.19))
 		X.JMin.S <- c(X.JMin.S,rep(JMin[30,4],N.sdl.19)); X.JMax.S <- c(X.JMax.S,rep(JMax[30,4],N.sdl.19))
