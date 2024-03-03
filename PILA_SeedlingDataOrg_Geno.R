@@ -439,7 +439,7 @@ for(t in 2:5){ ###looping over years
 		X.Sites.G <- rbind(X.Sites.G,site.temp.G)
 		
 		#Year/age
-		Yr.temp.G <- matrix(0,N.sdl.17G,5); Yr.temp.G[,1] <- 1   #(1,0,0,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.17G,4); Yr.temp.G[,1] <- 1   #(1,0,0,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
 		#Height
@@ -473,7 +473,7 @@ for(t in 2:5){ ###looping over years
 		X.Sites.G <- rbind(X.Sites.G,site.temp.G)
 		
 		#Year/age
-		Yr.temp.G <- matrix(0,N.sdl.17G,5); Yr.temp.G[,2] <- 1   #(0,1,0,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.17G,4); Yr.temp.G[,2] <- 1   #(0,1,0,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
 		#Height
@@ -502,7 +502,7 @@ for(t in 2:5){ ###looping over years
 		X.Sites.G <- rbind(X.Sites.G,site.temp.G)
 		
 		#Year/age
-		Yr.temp.G <- matrix(0,N.sdl.18G,5); Yr.temp.G[,1] <- 1   #(1,0,0,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.18G,4); Yr.temp.G[,1] <- 1   #(1,0,0,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
 		#Height
@@ -540,7 +540,7 @@ for(t in 2:5){ ###looping over years
 		X.Sites.G <- rbind(X.Sites.G,site.temp.G)
 				
 		#Year/age
-		Yr.temp.G <- matrix(0,N.sdl.17G,5); Yr.temp.G[,3] <- 1   #(0,0,1,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.17G,4); Yr.temp.G[,3] <- 1   #(0,0,1,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
 		#Height
@@ -569,7 +569,7 @@ for(t in 2:5){ ###looping over years
 		X.Sites.G <- rbind(X.Sites.G,site.temp.G)
 		
 		#Year/age
-		Yr.temp.G <- matrix(0,N.sdl.18G,5); Yr.temp.G[,2] <- 1   #(0,1,0,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.18G,4); Yr.temp.G[,2] <- 1   #(0,1,0,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
 		#Height
@@ -598,7 +598,7 @@ for(t in 2:5){ ###looping over years
 		X.Sites.G <- rbind(X.Sites.G,site.temp.G)
 		
 		#Year/age
-		Yr.temp.G <- matrix(0,N.sdl.19G,5); Yr.temp.G[,1] <- 1   #(1,0,0,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.19G,4); Yr.temp.G[,1] <- 1   #(1,0,0,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
 		#Height
@@ -648,9 +648,9 @@ for(t in 2:5){ ###looping over years
 		X.Sites.G <- rbind(X.Sites.G,site.temp.G)
 		
 		#Year/age
-		Yr.temp.S <- matrix(0,N.sdl.17,5); Yr.temp.S[,5] <- 1   #(0,0,0,0,1)
+		Yr.temp.S <- matrix(0,N.sdl.17,3); Yr.temp.S[,3] <- 1   #(0,0,1)
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
-		Yr.temp.G <- matrix(0,N.sdl.17G,5); Yr.temp.G[,4] <- 1   #(0,0,0,1,0)
+		Yr.temp.G <- matrix(0,N.sdl.17G,4); Yr.temp.G[,4] <- 1   #(0,0,0,1)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
 		#Height
@@ -691,9 +691,9 @@ for(t in 2:5){ ###looping over years
 		X.Sites.G <- rbind(X.Sites.G,site.temp.G)
 		
 		#Year/age
-		Yr.temp.S <- matrix(0,N.sdl.18,5); Yr.temp.S[,4] <- 1   #(0,0,0,1,0)
+		Yr.temp.S <- matrix(0,N.sdl.18,3); Yr.temp.S[,2] <- 1   #(0,1,0)
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
-		Yr.temp.G <- matrix(0,N.sdl.18G,5); Yr.temp.G[,3] <- 1   #(0,0,1,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.18G,4); Yr.temp.G[,3] <- 1   #(0,0,1,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
 		#Height
@@ -734,9 +734,9 @@ for(t in 2:5){ ###looping over years
 		X.Sites.G <- rbind(X.Sites.G,site.temp.G)
 		
 		#Year/age
-		Yr.temp.S <- matrix(0,N.sdl.19,5); Yr.temp.S[,3] <- 1   #(0,0,1,0,0)
+		Yr.temp.S <- matrix(0,N.sdl.19,3); Yr.temp.S[,1] <- 1   #(1,0,0)
 		X.Yr.S <- rbind(X.Yr.S,Yr.temp.S)
-		Yr.temp.G <- matrix(0,N.sdl.19G,5); Yr.temp.G[,2] <- 1   #(0,1,0,0,0)
+		Yr.temp.G <- matrix(0,N.sdl.19G,4); Yr.temp.G[,2] <- 1   #(0,1,0,0)
 		X.Yr.G <- rbind(X.Yr.G,Yr.temp.G)
 		
 		#Height
