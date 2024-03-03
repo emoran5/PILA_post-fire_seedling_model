@@ -53,9 +53,9 @@ X1 <- cbind(rep(1,N.grow),X.Sites.G,X.Yr.G,X.Ht.G,X.Geno.G2,X.CWD.G)
 I <- ncol(X1)  #columns of design matrix
 
 ###### Priors
-Bpm <- c(5,rep(0,3),rep(0,5),0.15,rep(0.1,5),0)
+Bpm <- c(5,rep(0,3),rep(0,4),0.15,rep(0.1,5),0)
 #Intercept = 5 cm annual growth; 0 site-level and year means; 
-Bps <- c(6,rep(6,3),rep(6,5),6,rep(6,5),6)   #variances
+Bps <- c(6,rep(6,3),rep(6,4),6,rep(6,5),6)   #variances
 bprior <- matrix(Bpm,I,1)  #beta mean matrix
 vinvert <- solve(diag(Bps))  # 1/beta variances
 
@@ -70,7 +70,7 @@ S2 <- 0.35
 
 
 ###Starting values
-Beta <- c(runif(1,2,10),runif(3,-2,2),runif(5,-2,2),runif(1,-0.1,0.5),runif(5,-1,1),runif(1,-1,1))
+Beta <- c(runif(1,2,10),runif(3,-2,2),runif(4,-2,2),runif(1,-0.1,0.5),runif(5,-1,1),runif(1,-1,1))
 Sig <- runif(1,0.05,0.5)  
 
 ncyc <- 25000  #Number of Gibbs Steps
@@ -123,7 +123,7 @@ outpar[,3]<- c(apply(beta.thin,1,sd),sd(sig.thin))
 outpar[,4]<- c(apply(beta.thin,1, quantile, probs= 0.025),quantile(sig.thin,0.025))
 outpar[,5]<- c(apply(beta.thin,1, quantile, probs= 0.975),quantile(sig.thin,0.975))
 colnames(outpar) <- c('prior','estimate','se','.025','.975')
-rownames(outpar) <- c('Int','site17','site18','site19','Yr1','Yr2','Yr3','Yr4','Yr5','Ht','SnoG','JMxG','CWDG','JMinG','PrG','Clim','sig')
+rownames(outpar) <- c('Int','site17','site18','site19','Yr1','Yr2','Yr3','Yr4','Ht','SnoG','JMxG','CWDG','JMinG','PrG','Clim','sig')
 outpar
 
 
